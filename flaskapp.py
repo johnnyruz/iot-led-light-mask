@@ -21,11 +21,15 @@ def index():
 	print(path)
 
 	isOffline = False
+	isError = False
 
 	try:
 		r = requests.get(path, timeout=5)
 		json = r.json()
 
+		if 'error' in json:
+			isError = True
+			isOffline = True
 
 		if 'result' in json:
 			result = json['result']
@@ -58,7 +62,7 @@ def index():
 
 	finally:
 
-		return render_template("index.html", speed = speed, color = color, bright = bright, motion = motion, rainbow = rainbow, isOffline = isOffline)
+		return render_template("index.html", speed = speed, color = color, bright = bright, motion = motion, rainbow = rainbow, isOffline = isOffline, isError = isError)
 
 
 @app.route("/updateMotion", methods=["POST"])
