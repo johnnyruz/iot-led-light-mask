@@ -1,0 +1,191 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">    
+<title>LED MASK</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- Toggle Button Bootstrap -->
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+<img class="img-responsive" src="{{ url_for('static', filename='img/MaskTitle.png') }}">
+</div>
+
+<br>
+<div class="container-fluid">
+	
+		<div class="col-sm-2">
+			<Label class="button-label">Motion</Label>
+		</div>
+		<div class="col-sm-10">
+			<input id="toggle-motion" type="checkbox" data-toggle="toggle" data-size="large">
+		</div>
+	
+</div>
+<br>
+<div id="speedControls" class="container-fluid">
+  <div class="col-sm-12">
+	<input type="range" min="1" max="1024" value={{ speed }} class="slider" ontouchend="callSpeedFunction()" onmouseup="callSpeedFunction()" id="speed">
+	<br>
+	<button id="btnSpeed" type="button" class="btn-lg btn-primary">Change Speed!</button>
+  </div>
+</div>
+
+<br><br>
+<div class="container-fluid">
+    
+	<div class="col-sm-2">
+		<Label class="button-label">Rainbow Mode</Label>
+	</div>
+	<div class="col-sm-10">
+		<input id="toggle-rainbow" type="checkbox" data-toggle="toggle" data-size="large">
+	</div>
+</div>
+<br>
+<div id="colorControls" class="container-fluid">
+  <div class="col-sm-12">
+	<input type="range" min="1" max="1024" value={{ color }} class="slider slider-color" ontouchend="callColorFunction()" onmouseup="callColorFunction()" id="color">
+	<br>
+	<button id="btnColor" type="button" class="btn-lg btn-primary text-center">Change Color!</button>
+  </div>
+</div>
+
+
+
+<script>
+
+  
+
+  $(function() {
+  
+    $('#toggle-motion').bootstrapToggle('{{ motion }}')
+    $('#toggle-rainbow').bootstrapToggle('{{ rainbow }}')
+	
+	if('{{ motion }}' != 'on'){
+		$('#speedControls').css("visibility", "hidden");
+	}
+	
+	if('{{ rainbow }}' == 'on'){
+		$('#colorControls').css("visibility", "hidden");
+	}
+  
+    $('#toggle-motion').change(function() {
+
+      var v = $(this).prop('checked');  
+      $.ajax({
+          url: 'updateMotion',
+          method: 'post',
+          data: {'data': v},
+          success: function(data){
+		  
+			if(v){
+				$('#speedControls').css("visibility", "");
+			}
+			else{
+				$('#speedControls').css("visibility", "hidden");
+			}
+		  
+		  },
+          error: function(){}
+
+      });
+    });
+
+    $('#toggle-rainbow').change(function() {
+
+      var v = $(this).prop('checked');
+      $.ajax({
+          url: 'updateRainbow',
+          method: 'post',
+          data: {'data': v},
+          success: function(data){
+		  
+			if(v){
+				$('#colorControls').css("visibility", "hidden");
+			}
+			else{
+				$('#colorControls').css("visibility", "");;
+			}
+		  
+		  },
+          error: function(){}
+      });
+
+    })
+	
+	$('#btnSpeed').click(function() {
+	
+		var v = $('#speed').prop('value');		
+		$.ajax({
+          url: 'updateSpeed',
+          method: 'post',
+          data: {'data': v},
+          success: function(data){},
+          error: function(){}
+        });	
+	})
+	
+	$('#btnColor').click(function() {
+	
+		var v = $('#color').prop('value');		
+		$.ajax({
+          url: 'updateColor',
+          method: 'post',
+          data: {'data': v},
+          success: function(data){},
+          error: function(){}
+        });	
+	})
+	
+  })
+  
+  function callColorFunction () { 
+  
+	var v = $('#color').prop('value');		
+	$.ajax({
+	  url: 'updateColor',
+	  method: 'post',
+	  data: {'data': v},
+	  success: function(data){},
+	  error: function(){}
+	});	  
+  }  
+  
+  function callSpeedFunction () {
+  
+	var v = $('#speed').prop('value');		
+	$.ajax({
+	  url: 'updateSpeed',
+	  method: 'post',
+	  data: {'data': v},
+	  success: function(data){},
+	  error: function(){}
+	}); 
+  }
+  
+  
+</script>
+
+</body>
+</html>
