@@ -10,8 +10,8 @@ bright = 255
 motion = "off"
 rainbow = "off"
 
-url = 'https://api.particle.io/v1/devices/johnnyruz-particle-1'
-key = '457ad875041a62a3912cc13e1bef7e9130b45a62'
+url = 'https://api.particle.io/v1/devices/[PARTICLE_DEVICE_NAME]'
+key = '[PARTICLE_API_KEY]'
 
 
 @app.route("/", methods=["GET","POST"])
@@ -61,12 +61,6 @@ def index():
 		return render_template("index.html", speed = speed, color = color, bright = bright, motion = motion, rainbow = rainbow, isOffline = isOffline)
 
 
-@app.route("/id2", methods=["GET"])
-def index2():
-
-	return render_template("index2.html", speed = speed, color = color, motion = motion, rainbow = rainbow)
-
-
 @app.route("/updateMotion", methods=["POST"])
 def updateMotion():
 
@@ -105,7 +99,10 @@ def updateRainbow():
 		payload = dict(arg=toggleVal)
 		headers = {'content-type': 'application/json'}
 
-		r = requests.post('https://api.particle.io/v1/devices/johnnyruz-particle-1/rainbow?access_token=457ad875041a62a3912cc13e1bef7e9130b45a62', payload, headers)
+		path = getPath('rainbow')
+
+
+		r = requests.post(path, payload, headers)
 
 		json = r.json()
 
@@ -131,7 +128,9 @@ def updateSpeed():
 		payload = dict(arg=str(speedVal))
 		headers = {'content-type': 'application/json'}
 
-		r = requests.post('https://api.particle.io/v1/devices/johnnyruz-particle-1/speed?access_token=457ad875041a62a3912cc13e1bef7e9130b45a62', payload, headers)
+		path = getPath('speed')
+
+		r = requests.post(path, payload, headers)
 
 		json = r.json()
 		print("Return Value: " + str(json['return_value']))
@@ -153,7 +152,9 @@ def updateBright():
 		payload = dict(arg=str(brightVal))
 		headers = {'content-type': 'application/json'}
 
-		r = requests.post('https://api.particle.io/v1/devices/johnnyruz-particle-1/bright?access_token=457ad875041a62a3912cc13e1bef7e9130b45a62', payload, headers)
+		path = getPath('bright')
+
+		r = requests.post(path, payload, headers)
 
 		json = r.json()
 		print("Return Value: " + str(json['return_value']))
@@ -174,7 +175,9 @@ def updateColor():
 		payload = dict(arg=colorVal)
 		headers = {'content-type': 'application/json'}
 
-		r = requests.post('https://api.particle.io/v1/devices/johnnyruz-particle-1/color?access_token=457ad875041a62a3912cc13e1bef7e9130b45a62', payload, headers)
+		path = getPath('color')
+
+		r = requests.post(path, payload, headers)
 
 		json = r.json()
 		print("Return Value: " + str(json['return_value']))
