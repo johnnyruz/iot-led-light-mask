@@ -351,14 +351,31 @@ String getValue(String data, char separator, int index)
 // The colours are a transition r - g - b - back to r.
 uint32_t Wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
+  float rainbowBrightness = (brightness / 255.0);
+  int r = 0;
+  int g = 0;
+  int b = 0;
+  
   if(WheelPos < 85) {
-    return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3,0);
+    r = (255.0 - float(WheelPos) * 3.0) * rainbowBrightness;
+    g = 0;
+    b = (float(WheelPos) * 3.0) * rainbowBrightness;
   }
-  if(WheelPos < 170) {
+  else if(WheelPos < 170) {
     WheelPos -= 85;
-    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3,0);
+    r = 0;
+    g = (float(WheelPos) * 3.0) * rainbowBrightness;
+    b = (255.0 - float(WheelPos) * 3.0) * rainbowBrightness;
   }
-  WheelPos -= 170;
-  return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0,0);
+  else {
+    WheelPos -= 170;
+    r = (float(WheelPos) * 3.0) * rainbowBrightness;
+    g = (255.0 - float(WheelPos) * 3.0) * rainbowBrightness;
+    b = 0;
+  }
+  
+  return strip.Color(r, g, b, 0);
+
 }
+
 
