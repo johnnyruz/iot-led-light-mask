@@ -1,0 +1,27 @@
+# DESCRIPTION:	  Create LED Light Mask Docker!!
+# AUTHOR:         John Ruzick <johnnyruzdev01@outlook.com>
+# COMMENTS:
+#	
+# USAGE:
+#	docker-compose up (use optional -d argument to run as daemon)
+#
+
+# Base docker image
+FROM debian:stretch-slim
+
+LABEL maintainer "John Ruzick <johnnyruzdev01@outlook.com>"
+
+# Tell debconf to run in non-interactive mode
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update
+RUN apt-get upgrade -y
+# RUN apt-get install -y unzip wget sudo
+RUN apt-get install -y git python3-pip --no-install-recommends
+
+RUN pip3 install flask; pip3 install requests
+
+RUN git clone https://github.com/johnnyruz/iot-led-light-mask.git
+
+EXPOSE 5000
+CMD ["python3", "/iot-led-light-mask/flaskapp.py"]

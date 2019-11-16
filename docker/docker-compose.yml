@@ -1,0 +1,8 @@
+version: '3'
+services:
+  ledmask:
+    build: .
+    hostname: ledmask
+    image: johnnyruz/led_light_mask
+    ports:
+      - "5000:5000"
