@@ -29,7 +29,9 @@
 <body>
 
 <div class="container-fluid">
-<img class="img-responsive" src="{{ url_for('static', filename='img/MaskTitle.png') }}">
+<a href=".">
+<img class="img-responsive" src="{{ url_for('static', filename='img/MaskTitle.png') }}" height="480" width="640" alt="Mask Logo">
+</a>
 </div>
 
 <div class="container-fluid">
@@ -37,9 +39,10 @@
 	<input type="text" class="form-control" id="deviceUrl" value={{ url }}>
 	<br>
 	<label class="button-label" for="deviceApiKey">Device Api Key</label>
-	<input type="text" class="form-control" id="deviceApiKey" value={{ key }}>
+	<input type="password" class="form-control" id="deviceApiKey" value={{ key }}>
 	<br>
 	<button type="button" class="btn btn-info btn-lg" onclick="saveSettings()">Save</button>
+	<label style="padding-left: 20px;" class="button-label" id="lblSaveResult">
 </div>
 
 <script>
@@ -56,6 +59,7 @@
 	  data: {'url': url, 'key': key},
 	  success: function(data){
 		$('#deviceApiKey').val(data.key);
+		$('#lblSaveResult').text(data.res);
 	  },
 	  error: function(){}
 	}); 

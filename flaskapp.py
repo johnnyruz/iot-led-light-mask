@@ -12,7 +12,7 @@ motion = "off"
 rainbow = "off"
 
 url = ""
-key = ""
+apikey = ""
 
 try:
 
@@ -24,15 +24,14 @@ except:
 	pickle.dump( device_credentials, open( ".save.p", "wb" ) )
 
 url = device_credentials['url']
-key = device_credentials['key']
+apikey = device_credentials['key']
 
 
 @app.route("/", methods=["GET","POST"])
 def index():
 
 	path = getPath('conditions')
-	print(path)
-
+	
 	isOffline = False
 	isError = False
 
@@ -80,7 +79,7 @@ def index():
 @app.route("/setup-mask-credentials", methods=["GET"])
 def setup():
 
-	return render_template("setup.html", url=url, key=hiddenKey(key))
+	return render_template("setup.html", url=url, key=apikey)
 
 @app.route("/updateMotion", methods=["POST"])
 def updateMotion():
@@ -217,16 +216,18 @@ def updateSettings():
 		global url
 		url = request.form['url']
 		
-		global key
-		key = request.form['key']
+		global apikey
+		apikey = request.form['key']
 
-		device_credentials = { "url": url, "key": key }
+		result = "Saved Successfully!"
+
+		device_credentials = { "url": url, "key": apikey }
 		pickle.dump( device_credentials, open( ".save.p", "wb" ) )
 
-		return dict(url=url,key=hiddenKey(key))
+		return dict(res=result, url=url, key=apikey)
 
 def getPath( p ):
-	return str(url) + '/' + str(p) + '?access_token=' + str(key)
+	return str(url) + '/' + str(p) + '?access_token=' + str(apikey)
 
 def hiddenKey( k ):
 	
