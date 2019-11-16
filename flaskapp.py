@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request
 import requests, json as jconvert
+import pickle
 app = Flask(__name__)
 
 speed = 500
@@ -10,8 +11,20 @@ bright = 255
 motion = "off"
 rainbow = "off"
 
-url = 'https://api.particle.io/v1/devices/[PARTICLE_DEVICE_NAME]'
-key = '[PARTICLE_API_KEY]'
+url = ""
+key = ""
+
+try:
+
+	device_credentials = pickle.load( open( ".save.p", "rb" ) )
+
+except:
+
+	device_credentials = { "url": "https://api.particle.io/v1/devices/[PARTICLE_DEVICE_NAME]", "key": "" }
+	pickle.dump( device_credentials, open( ".save.p", "wb" ) )
+
+url = device_credentials['url']
+key = device_credentials['key']
 
 
 @app.route("/", methods=["GET","POST"])
@@ -64,6 +77,10 @@ def index():
 
 		return render_template("index.html", speed = speed, color = color, bright = bright, motion = motion, rainbow = rainbow, isOffline = isOffline, isError = isError)
 
+@app.route("/setup-mask-credentials", methods=["GET"])
+def setup():
+
+	return render_template("setup.html", url=url, key=hiddenKey(key))
 
 @app.route("/updateMotion", methods=["POST"])
 def updateMotion():
@@ -191,9 +208,39 @@ def updateColor():
 		color = colorVal;
 
 		return "Success"
+		
+@app.route("/updateSettings", methods=["POST"])
+def updateSettings():
+
+	if request.method == "POST":
+
+		global url
+		url = request.form['url']
+		
+		global key
+		key = request.form['key']
+
+		device_credentials = { "url": url, "key": key }
+		pickle.dump( device_credentials, open( ".save.p", "wb" ) )
+
+		return dict(url=url,key=hiddenKey(key))
 
 def getPath( p ):
 	return str(url) + '/' + str(p) + '?access_token=' + str(key)
+
+def hiddenKey( k ):
+	
+	hk = ""
+	
+	if len(k) <= 8:
+		return k
+		
+	for i in range(0, len(k) - 8):
+		hk += "\u2022"
+
+	hk += k[-8:]
+	
+	return hk
 
 
 if __name__ == "__main__":
