@@ -79,7 +79,9 @@ def index():
 @app.route("/setup-mask-credentials", methods=["GET"])
 def setup():
 
-	return render_template("setup.html", url=url, key=apikey)
+	webData = dict(url=url, key=apikey)
+
+	return render_template("setup.html", data=webData)
 
 @app.route("/updateMotion", methods=["POST"])
 def updateMotion():
@@ -94,6 +96,7 @@ def updateMotion():
 
 		path = getPath('motion')
 
+		#POST to Particle.io
 		r = requests.post(path, payload, headers)
 
 		json = r.json()

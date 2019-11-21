@@ -36,10 +36,10 @@
 
 <div class="container-fluid">
 	<label class="button-label" for="deviceUrl">Device Url</label>
-	<input type="text" class="form-control" id="deviceUrl" value={{ url }}>
+	<input type="text" class="form-control" id="deviceUrl" value={{ data.url }}>
 	<br>
 	<label class="button-label" for="deviceApiKey">Device Api Key</label>
-	<input type="password" class="form-control" id="deviceApiKey" value={{ key }}>
+	<input type="password" class="form-control" id="deviceApiKey" value={{ data.key }}>
 	<br>
 	<button type="button" class="btn btn-info btn-lg" onclick="saveSettings()">Save</button>
 	<label style="padding-left: 20px;" class="button-label" id="lblSaveResult">
