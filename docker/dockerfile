@@ -7,7 +7,7 @@
 #
 
 # Base docker image
-FROM debian:stretch-slim
+FROM debian:bookworm-slim
 
 LABEL maintainer "John Ruzick <johnnyruzdev01@outlook.com>"
 
@@ -19,7 +19,7 @@ RUN apt-get upgrade -y
 # RUN apt-get install -y unzip wget sudo
 RUN apt-get install -y git python3-pip --no-install-recommends
 
-RUN pip3 install flask; pip3 install requests
+RUN apt install -y python3-flask; apt install -y python3-requests;
 
 RUN git clone https://github.com/johnnyruz/iot-led-light-mask.git
 
