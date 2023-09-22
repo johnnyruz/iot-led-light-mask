@@ -35,5 +35,5 @@ jobs:
               context: ./docker
               push: true
               tags: 
-                ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:${{ github.run_number }}:latest
-                ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:${{ github.run_number }}:${{ github.run_number }}
+                 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
+                 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:${{ github.run_number }}
