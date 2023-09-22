@@ -32,6 +32,7 @@ jobs:
             name: Build and push
             uses: docker/build-push-action@v5
             with:
+              context: ./docker
               push: true
               tags: 
                 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:${{ github.run_number }}:latest
